@@ -20,7 +20,7 @@ module Netzke
               @record.errors.to_a.each do |msg|
                 flash :error => msg
               end
-              {:feedback => @flash}
+              {:feedback => @flash, :show_form_errors => build_form_errors(record)}
             end
           end
       
@@ -41,7 +41,33 @@ module Netzke
           end
       
         end
+        
+        # Builds the form errors
+        def build_form_errors(record)
+          form_errors = {}
+          foreign_keys = {}
 
+          # Build a hash of foreign keys and the associated model          
+          data_class.reflect_on_all_associations(:belongs_to).map{ |r|
+            foreign_keys[r.association_foreign_key.to_sym] = r.name
+          }
+
+          record.errors.map{|field, error|
+            
+            # Get the correct field name for the error
+            if foreign_keys.has_key?(field)
+              fields.each do |k, v|
+                # Hack to stop to_nifty_json from camalizing model__field
+                field = k.to_s.gsub('__', '____') if k.to_s.split('__').first == foreign_keys[field].to_s
+              end
+            end
+            
+            form_errors[field] ||= []
+            form_errors[field] << error
+          }
+          form_errors
+        end
+        
         # Overriding configuration_panel's get_combobox_options endpoint call
         def configuration_panel__fields__get_combobox_options(params)
           query = params[:query]
