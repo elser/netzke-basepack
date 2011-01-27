@@ -3,6 +3,10 @@ class BookForm < Netzke::Basepack::FormPanel
 
   include BookPresentation
 
+  def default_config
+    super.merge(:mode => :lockable)
+  end
+
   def configuration
     super.merge(
       :model => "Book",
