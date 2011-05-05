@@ -3,16 +3,23 @@ module Netzke
     class TreePanel < Netzke::Base
       js_base_class "Ext.tree.TreePanel"
       js_mixin :tree_panel
-      
+      include Netzke::Basepack::DataAccessor
+
+      def default_config
+        super.tap {|c|
+          c[:indicate_leafs] = true
+          c[:auto_scroll] = true
+          c[:root_visible] = true
+        }
+      end
+
+      # Returns something like:      
+      #     [
+      #      { 'id'=> 1, 'text'=> 'A folder Node', 'leaf'=> false },
+      #      { 'id'=> 2, 'text'=> 'A leaf Node', 'leaf'=> true }
+      #     ]
       endpoint :get_children do |params|
-        puts params.inspect
-#        [
-#         { 'id'=> 1, 'text'=> 'A folder Node', 'leaf'=> false },
-#         { 'id'=> 2, 'text'=> 'A leaf Node', 'leaf'=> true }
-#        ]
-        klass = config[:model].constantize
-        node = params[:node] == 'root' ? klass.find_by_parent_id(nil) : klass.find(params[:node].to_i)
-        puts node.inspect
+        node = params[:node] == 'root' ? data_class.find_by_parent_id(nil) : data_class.find(params[:node])
         node.children.map do |n| 
           {
             :text => n.name, 
