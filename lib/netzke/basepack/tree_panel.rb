@@ -19,7 +19,11 @@ module Netzke
       #      { 'id'=> 2, 'text'=> 'A leaf Node', 'leaf'=> true }
       #     ]
       endpoint :get_children do |params|
-        node = params[:node] == 'root' ? data_class.find_by_parent_id(nil) : data_class.find(params[:node])
+        if params[:node] == 'root'
+          node = data_class.find_by_parent_id(nil) || data_class.find_by_parent_id(0)
+        else
+          node = data_class.find(params[:node])
+        end
         node.children.map do |n| 
           {
             :text => n.name, 
