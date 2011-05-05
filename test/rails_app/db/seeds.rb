@@ -18,3 +18,7 @@ User.create([
   {:first_name => "Sergei", :last_name => "Kozlov", :role => Role.find_by_name("reader")},
   {:first_name => "Paul", :last_name => "Schyska", :role => Role.find_by_name("reader")}
 ])
+
+root = Folder.create(:name => 'Root')
+root.children.create(:name => 'One')
+root.children.create(:name => 'Two').children.create(:name => 'Three')
