@@ -28,7 +28,8 @@ module Netzke
           {
             :text => n.name, 
             :id => n.id, 
-            :leaf => config[:indicate_leafs] && n.children.empty? 
+            :leaf => config[:indicate_leafs] && n.children.empty?,
+            :adding_children_enabled => true
           }
         end
       end
