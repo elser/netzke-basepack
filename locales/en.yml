@@ -62,6 +62,12 @@ en:
           search: Search
           search_tooltip: Extended search
 
+      tree_panel:
+        actions:
+          add: Add
+          edit: Edit
+          del: Delete
+
       query_builder:
         presets: Presets
         preset_saved: Preset successfully saved

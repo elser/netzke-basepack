@@ -1,9 +1,12 @@
+require "netzke/basepack/grid_panel/columns"
+
 module Netzke
   module Basepack
     class TreePanel < Netzke::Base
       js_base_class "Ext.tree.TreePanel"
       js_mixin :tree_panel
       include Netzke::Basepack::DataAccessor
+      include Netzke::Basepack::GridPanel::Columns
 
       def default_config
         super.tap {|c|
@@ -11,6 +14,63 @@ module Netzke
           c[:auto_scroll] = true
           c[:root_visible] = true
         }
+      end
+
+      def js_config #:nodoc:
+        super.merge({
+          :context_menu => config.has_key?(:context_menu) ? config[:context_menu] : default_context_menu,
+          :model => config[:model], # the model name
+          :pri => data_class.primary_key # table primary key name
+        })
+      end
+
+      # Override to change the default context menu
+      def default_context_menu
+        res = %w{ add edit del }.map(&:to_sym).map(&:action)
+        res
+      end
+
+      action :add do
+        {
+          :text => I18n.t('netzke.basepack.tree_panel.actions.add'),
+          :tooltip => I18n.t('netzke.basepack.tree_panel.actions.add'),
+          :icon => :add
+        }
+      end
+
+      action :edit do
+        {
+          :text => I18n.t('netzke.basepack.tree_panel.actions.edit'),
+          :tooltip => I18n.t('netzke.basepack.tree_panel.actions.edit'),
+          :icon => :table_edit
+        }
+      end
+
+      action :del do
+        {
+          :text => I18n.t('netzke.basepack.tree_panel.actions.del'),
+          :tooltip => I18n.t('netzke.basepack.tree_panel.actions.del'),
+          :icon => :table_row_delete
+        }
+      end
+
+      component :node_editor do
+        {
+          :lazy_loading => true,
+          :class_name => "Netzke::Basepack::TreePanel::NodeEditorWindow",
+          :title => "Add #{data_class.model_name.human}",
+          :button_align => "right",
+          :items => [{
+            :class_name => "Netzke::Basepack::FormPanel",
+            :model => config[:model],
+            :items => default_fields_for_forms,
+            :persistent_config => config[:persistent_config],
+            :border => true,
+            :bbar => false,
+            :header => false,
+            :mode => config[:mode]
+          }.deep_merge(config[:node_form_config] || {})]
+        }.deep_merge(config[:node_form_window_config] || {})
       end
 
       # Returns something like:      
@@ -32,6 +92,12 @@ module Netzke
             :adding_children_enabled => true
           }
         end
+      end
+
+      # When providing the edit_form component, fill in the form with the requested record
+      def deliver_component_endpoint(params)
+        components[:node_editor][:items].first.merge!(:record_id => params[:record_id].to_i) if params[:name] == 'node_editor'
+        super
       end
       
     end
