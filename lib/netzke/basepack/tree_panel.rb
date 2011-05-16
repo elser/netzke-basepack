@@ -8,6 +8,8 @@ module Netzke
       include Netzke::Basepack::DataAccessor
       include Netzke::Basepack::GridPanel::Columns
 
+      js_translate *%w[are_you_sure confirmation]
+
       def default_config
         super.tap {|c|
           c[:indicate_leafs] = true
@@ -92,6 +94,10 @@ module Netzke
             :adding_children_enabled => true
           }
         end
+      end
+      
+      endpoint :delete_node do |params|
+        data_class.delete(params[:id])
       end
       
       # When providing the edit_form component, fill in the form with the requested record
