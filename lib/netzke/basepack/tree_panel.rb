@@ -61,7 +61,7 @@ module Netzke
           :title => "Add #{data_class.model_name.human}",
           :button_align => "right",
           :items => [{
-            :class_name => "Netzke::Basepack::FormPanel",
+            :class_name => "Netzke::Basepack::TreePanel::NodeEditorForm",
             :model => config[:model],
             :items => default_fields_for_forms,
             :persistent_config => config[:persistent_config],
@@ -93,10 +93,14 @@ module Netzke
           }
         end
       end
-
+      
       # When providing the edit_form component, fill in the form with the requested record
       def deliver_component_endpoint(params)
-        components[:node_editor][:items].first.merge!(:record_id => params[:record_id].to_i) if params[:name] == 'node_editor'
+        if params[:name] == 'node_editor'
+          form = components[:node_editor][:items].first
+          form.merge!(:record => params[:record_id] ? data_class.find(params[:record_id]) : data_class.new)
+          form[:record].parent_id = params[:parent_id].to_i if params[:parent_id]
+        end
         super
       end
       
