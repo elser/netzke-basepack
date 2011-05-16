@@ -86,13 +86,17 @@ module Netzke
         else
           node = data_class.find(params[:node])
         end
-        node.children.map do |n| 
-          {
-            :text => n.name, 
-            :id => n.id, 
-            :leaf => config[:indicate_leafs] && n.children.empty?,
-            :adding_children_enabled => true
-          }
+        if node
+          node.children.map do |n| 
+            {
+              :text => n.name, 
+              :id => n.id, 
+              :leaf => config[:indicate_leafs] && n.children.empty?,
+              :adding_children_enabled => true
+            }
+          end
+        else
+          []
         end
       end
       
