@@ -104,6 +104,11 @@ module Netzke
         # override this method if needed
       end
       
+      endpoint :node_received_drag_and_drop do |params| #nodeReceivedDragAndDrop
+        # override this method if needed
+        puts "paramsssssssss " + params.inspect
+      end
+      
       endpoint :delete_node do |params|
         data_class.delete(params[:id])
       end

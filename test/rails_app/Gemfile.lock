@@ -40,6 +40,7 @@ GEM
       activesupport (= 3.0.5)
     activesupport (3.0.5)
     acts_as_list (0.1.2)
+    acts_as_tree (0.1.1)
     arel (2.0.9)
     builder (2.1.2)
     capybara (0.4.1.2)
@@ -153,6 +154,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
+  acts_as_tree
   capybara
   cucumber
   cucumber-rails
