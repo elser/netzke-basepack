@@ -108,7 +108,9 @@ module Netzke
       def deliver_component_endpoint(params)
         if params[:name] == 'node_editor'
           form = components[:node_editor][:items].first
-          form.merge!(:record => params[:record_id] ? data_class.find(params[:record_id]) : data_class.new)
+          if(!form[:record])
+            form.merge!(:record => params[:record_id] ? data_class.find(params[:record_id]) : data_class.new)
+          end
           form[:record].parent_id = params[:parent_id].to_i if params[:parent_id] && params[:parent_id].to_i>0
         end
         super
