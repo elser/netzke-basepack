@@ -109,7 +109,7 @@ module Netzke
         if params[:name] == 'node_editor'
           form = components[:node_editor][:items].first
           form.merge!(:record => params[:record_id] ? data_class.find(params[:record_id]) : data_class.new)
-          form[:record].parent_id = params[:parent_id].to_i if params[:parent_id]
+          form[:record].parent_id = params[:parent_id].to_i if params[:parent_id] && params[:parent_id].to_i>0
         end
         super
       end
