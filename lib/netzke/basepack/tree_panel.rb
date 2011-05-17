@@ -100,6 +100,10 @@ module Netzke
         end
       end
       
+      endpoint :node_selected do |params|
+        # override this method if needed
+      end
+      
       endpoint :delete_node do |params|
         data_class.delete(params[:id])
       end
