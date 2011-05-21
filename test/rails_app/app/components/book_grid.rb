@@ -5,6 +5,7 @@ class BookGrid < Netzke::Basepack::GridPanel
   def default_config
     super.merge(
       :model => "Book",
+      :sort_info => { :sort=> :title, :dir => :desc },
       :persistence => true
     )
   end

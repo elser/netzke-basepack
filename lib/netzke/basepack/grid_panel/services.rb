@@ -206,6 +206,11 @@ module Netzke
               assoc, method = c[:name].split('__')
               relation = relation.includes(assoc.to_sym) if method
             end
+            
+            if config[:sort_info]
+              params[:sort] ||= config[:sort_info][:sort].to_s
+              params[:dir] ||= config[:sort_info][:dir]
+            end
 
             # apply sorting if needed
             if params[:sort]
