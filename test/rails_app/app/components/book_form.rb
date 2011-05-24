@@ -8,6 +8,7 @@ class BookForm < Netzke::Basepack::FormPanel
     super.merge(
       :model => "Book",
       :record => Book.first,
+      :file_upload => true,
       :items => [
         :title,
         {:name => :author__first_name, :setter => author_first_name_setter},
