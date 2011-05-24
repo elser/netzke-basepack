@@ -4,7 +4,7 @@ class FolderTreeDragNDrop < Netzke::Basepack::BorderLayoutPanel
                    :name => "folder_tree",
                    :region => :west,
                    :width => '50%',
-                   :enable_d_d => true,
+                   :enable_drop => true,
                    :dd_group => 'grid2tree',
                  },
                  {
